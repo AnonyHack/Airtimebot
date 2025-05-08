@@ -35,8 +35,8 @@ logger = logging.getLogger(__name__)
 CONFIG = {
     'token': os.getenv('TELEGRAM_BOT_TOKEN', ''),
     'admin_id': int(os.getenv('ADMIN_ID', '')),
-    'required_channels': os.getenv('REQUIRED_CHANNELS', 'Freenethubz,Freeairtimehub,Freenethubchannel').split(','),
-    'channel_links': os.getenv('CHANNEL_LINKS', 'https://t.me/Freenethubz,https://t.me/Freeairtimehub,https://t.me/Freenethubchannel').split(',')
+    'required_channels': os.getenv('REQUIRED_CHANNELS', 'Freeinternetonly,Freeairtimehub,Freenethubchannel').split(','),
+    'channel_links': os.getenv('CHANNEL_LINKS', 'https://t.me/Freeinternetonly,https://t.me/Freeairtimehub,https://t.me/Freenethubchannel').split(',')
 }
 
 # MongoDB connection
@@ -278,8 +278,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if context.args:
         try:
             referrer_id = int(context.args[0])
-            # Verify referrer exists
-            if not users_collection.find_one({'user_id': referrer_id}):
+            # Ensure the referrer exists and is not the same as the user
+            if referrer_id == user_id or not users_collection.find_one({'user_id': referrer_id}):
                 referrer_id = None
         except ValueError:
             referrer_id = None
